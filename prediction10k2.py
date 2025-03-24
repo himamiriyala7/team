@@ -11,6 +11,41 @@ import numpy as np
 import base64
 import os
 
+csv_file_path = 'final_dataset10.csv'  # Path to your CSV file
+data = pd.read_csv(csv_file_path)
+
+# ✅ Step 2: Connect to SQLite Database (it will create if it doesn't exist)
+conn = sqlite3.connect('hospital10_data.db')  # The SQLite database file
+cursor = conn.cursor()
+
+# ✅ Step 3: Create a table in the database (adjust schema based on your data)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS hospital10_data (
+    ENCOUNTER TEXT PRIMARY KEY,
+    START TEXT,
+    STOP TEXT,
+    PATIENT TEXT,
+    ENCOUNTERCLASS TEXT,
+    BIRTHDATE TEXT,
+    DEATHDATE TEXT,
+    GENDER TEXT,
+    CITY TEXT,
+    STATE TEXT,
+    AGE INTEGER,
+    HOSPITAL_NAME TEXT,
+    ADDRESS TEXT,
+    ORGANIZATION_ID TEXT,
+    PROCEDURE_DESCRIPTION TEXT,
+    LOS INTEGER
+);
+
+# ✅ Step 4: Insert the data into the table (handle duplicates if necessary)
+data.to_sql('hospital10_data', conn, if_exists='replace', index=False)
+
+# ✅ Step 5: Commit and close the connection
+conn.commit()
+conn.close()
+
 # ✅ Assign Hospital Group (A-H, I-P, Q-Z)
 def assign_group(hospital_name):
     if hospital_name and hospital_name[0].upper() <= 'H':
