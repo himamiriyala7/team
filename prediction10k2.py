@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS hospital10_data (
     PROCEDURE_DESCRIPTION TEXT,
     LOS INTEGER
 );
-
+''')
 # ✅ Step 4: Insert the data into the table (handle duplicates if necessary)
 data.to_sql('hospital10_data', conn, if_exists='replace', index=False)
 
